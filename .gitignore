@@ -1,0 +1,18 @@
+# dados de cada instalação (nascem na primeira abertura)
+dados/
+*.db
+*.db-wal
+*.db-shm
+
+# configuração local desta instalação (há um .exemplo.json de cada)
+config.json
+departamentos.json
+usuarios.json
+sessoes.json
+feriados.json
+obrigacoes.json
+
+# logs e caches
+*.log
+__pycache__/
+*.pyc
