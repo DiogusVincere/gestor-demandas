@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestor de Demandas</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div id="app">
+  <aside id="lateral">
+    <div class="marca">
+      <div class="marca-nome">Gestor de</div>
+      <div class="marca-sub">Demandas</div>
+    </div>
+    <button id="bt-nova-demanda" class="primario nova-demanda" title="Criar uma demanda preenchendo os campos à mão">+ Nova demanda</button>
+    <nav id="nav-fixa">
+      <a class="nav-item" data-visao-fixa="minhas"><span class="ico">◎</span>Minhas tarefas</a>
+      <a class="nav-item" id="nav-caixa" data-acao="caixa"><span class="ico">⌂</span>Caixa de entrada<span class="conta" id="caixa-conta"></span></a>
+    </nav>
+    <div class="lateral-titulo">Espaços <button class="mini" id="bt-novo-espaco" title="Novo espaço">+</button></div>
+    <div id="espacos"></div>
+    <div class="lateral-titulo recolhivel" id="titulo-acompanhar">Acompanhar <span class="seta">▸</span></div>
+    <nav id="nav-acompanhar" class="oculto">
+      <a class="nav-item" data-visao-fixa="atrasadas"><span class="ico">⚑</span>Atrasadas</a>
+      <a class="nav-item" data-visao-fixa="concluidas"><span class="ico">✓</span>Concluídas</a>
+      <a class="nav-item" data-visao-fixa="historico"><span class="ico">≡</span>Histórico</a>
+    </nav>
+    <div id="config-escondida" class="oculto">
+      <button id="bt-modelos"></button><div id="modelos-lateral"></div>
+      <button id="bt-triagem"></button><div id="triagem-lateral"></div>
+      <button id="bt-equipe"></button><div id="equipe-lateral"></div>
+      <button id="bt-avisos"></button><div id="avisos-lateral"></div>
+      <div id="titulo-departamentos" class="oculto"><button id="bt-departamentos"></button></div><div id="departamentos-lateral"></div>
+    </div>
+    <div class="lateral-rodape">
+      <span id="quem"></span>
+      <button class="mini" id="bt-trocar-nome" title="Trocar o nome">✎</button>
+      <button class="mini config" id="bt-config" title="Configurações: clientes, equipe, triagem, modelos, avisos, lixeira, departamentos">⚙</button>
+    </div>
+  </aside>
+
+  <main id="principal">
+    <header id="cabecalho">
+      <div class="cab-linha">
+        <div class="cab-titulo">
+          <span id="cab-espaco" class="cab-espaco"></span>
+          <h1 id="cab-nome" title="Clique para renomear"></h1>
+          <button class="mini" id="bt-config-lista" title="Campos, automações, modelo">⚙</button>
+        </div>
+        <div class="ferramentas">
+          <button class="mini icone" id="bt-busca" title="Buscar (Ctrl+K)">🔍</button>
+          <button class="mini icone" id="bt-notif" title="Notificações">🔔<span id="notif-badge" class="badge oculto"></span></button>
+          <button class="mini" id="bt-filtros" title="Filtrar, agrupar, colunas">Filtros ▾</button>
+        </div>
+      </div>
+      <div class="cab-linha">
+        <div class="rapido">
+          <input id="rapido" type="text" autocomplete="off"
+                 placeholder="Escreva e aperte Enter: 101 carta de faturamento até sexta pra ana">
+          <textarea id="rapido-area" class="oculto" rows="6"
+                    placeholder="Cole a conversa inteira (WhatsApp, e-mail ou chat): o app separa quem falou, destrincha o checklist e usa o que você combinou. Escreva embaixo o que quiser acrescentar (pra ana, até sexta…). Ctrl+Enter cria."></textarea>
+          <button id="bt-colar" class="mini" title="Colar uma mensagem inteira (WhatsApp, e-mail ou chat)">📋</button>
+          <button id="bt-rapido" class="primario">Adicionar</button>
+        </div>
+      </div>
+      <div class="cab-linha compacta">
+        <div class="visoes-linha">
+          <div class="visoes" id="visoes">
+            <button data-visao="lista">Lista</button>
+            <button data-visao="quadro">Quadro</button>
+            <button data-visao="calendario">Calendário</button>
+          </div>
+          <div class="visoes salvas" id="visoes-salvas"></div>
+          <button class="mini" id="bt-salvar-visao" title="Salvar a visão atual com um nome">+ visão</button>
+        </div>
+        <div id="filtros-pop" class="pop oculto">
+          <input id="filtro" type="search" placeholder="Filtrar por texto…">
+          <select id="agrupar" title="Agrupar por"></select>
+          <button class="mini" id="bt-colunas" title="Mostrar ou esconder colunas">Colunas…</button>
+          <label class="check"><input type="checkbox" id="mostrar-feitas"> mostrar concluídas</label>
+        </div>
+      </div>
+      <div id="fichas" class="fichas"></div>
+    </header>
+    <div id="resumo-dia" class="lembretes resumo oculto"></div>
+    <div id="lembretes" class="lembretes oculto"></div>
+    <section id="visao"></section>
+    <div id="lote-barra" class="lote-barra oculto"></div>
+  </main>
+
+  <aside id="painel" class="fechado">
+    <div class="painel-topo">
+      <button id="bt-fechar-painel" class="mini" title="Fechar (Esc)">×</button>
+      <span id="painel-chave" class="chave"></span>
+      <span id="painel-caminho" class="apagado"></span>
+      <button id="bt-apagar" class="mini perigo" title="Apagar (vai para a lixeira, dá para desfazer)">🗑</button>
+    </div>
+    <div class="painel-corpo" id="painel-corpo"></div>
+  </aside>
+
+  <div id="menu" class="menu oculto"></div>
+  <div id="notif-pop" class="pop notif oculto"></div>
+  <div id="busca" class="modal oculto"><div class="busca-caixa"><input id="busca-input" type="text" placeholder="Buscar por ID, título, cliente ou lista… (Esc fecha)" autocomplete="off"><div id="busca-lista"></div></div></div>
+  <div id="modal" class="modal oculto">
+    <div class="modal-caixa">
+      <h2>Quem é você?</h2>
+      <p class="apagado">O nome aparece nas tarefas que você cria e em "Minhas tarefas".</p>
+      <input id="modal-nome" type="text" placeholder="Seu nome" autocomplete="off">
+      <div class="modal-botoes"><button id="modal-ok" class="primario">Entrar</button></div>
+    </div>
+  </div>
+  <div id="dialogo" class="modal oculto"><div class="modal-caixa grande" id="dialogo-caixa"></div></div>
+  <div id="aviso" class="aviso oculto"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
