@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestor de Demandas — bolha</title>
+<style>
+  :root { --acento: #2F5D8A; --acento-d: #27507A; --acento-dd: #1F4264; --escuro: #1F2933; --tinta: #1F2933; --apagado: #5F6B76; --linha: #E1E5EA; --claro: #EEF2F6;
+          --verde: #1E7B4F; --verde-t: #DEF2E6; --ambar: #8A6410; --ambar-t: #FBEEDA; --vermelho: #A33C2E; --vermelho-t: #F6E1DE; --azul: #185FA5; --azul-t: #E6F1FB; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--acento-d); font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; font-size: 13px; color: var(--tinta); overflow: hidden; }
+  body.navegador { background: #F4F6F5; }
+  body.aberta { background: #fff; }
+  body.com-balao { background: transparent; }
+  .oculto { display: none !important; }
+  /* recolhida: a barrinha (200×60) fica no canto inferior direito da janela; o balão de aviso nasce acima dela
+     (a janela cresce para cima e para a esquerda quando há aviso) */
+  #bolha { position: absolute; right: 0; bottom: 0; width: 200px; height: 60px; background: var(--acento-d); color: #fff; display: flex; align-items: center; gap: 10px; padding: 0 14px 0 10px;
+           cursor: grab; user-select: none; font-size: 14px; font-weight: 500; }
+  body.navegador #bolha { right: 12px; bottom: 12px; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+  body.com-balao #bolha { border-radius: 14px 0 0 0; }
+  #bolha:hover { background: var(--acento); }
+  #bolha.alerta { background: var(--vermelho); animation: pulsa 1.4s infinite; }
+  @keyframes pulsa { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.25); } }
+  #bolha .mais { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; flex: none; }
+  #bolha .rot { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+  #bolha .rot small { font-size: 10.5px; opacity: .85; font-weight: 400; letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #bolha .badge { margin-left: auto; min-width: 24px; height: 24px; border-radius: 999px; background: #fff; color: var(--acento-dd); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; padding: 0 7px; flex: none; }
+  #bolha.alerta .badge { color: var(--vermelho); }
+  #bolha .badge:empty { display: none; }
+  /* o balão: o aviso que chega com a bolha recolhida; lembrete e urgente trazem "me lembra depois" */
+  #balao { position: absolute; right: 0; bottom: 66px; width: 340px; background: var(--escuro); color: #fff; padding: 9px 12px 9px 12px; border-radius: 12px; font-size: 12.5px; box-shadow: 0 6px 18px rgba(0,0,0,.25); line-height: 1.35; }
+  #balao .tipo { display: block; font-size: 10.5px; letter-spacing: .5px; text-transform: uppercase; color: #9AA7B3; margin-bottom: 2px; }
+  #balao .texto { cursor: pointer; display: block; }
+  #balao .fechar { position: absolute; top: 4px; right: 8px; color: #9AA7B3; font-size: 14px; cursor: pointer; }
+  #balao .balao-acoes { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+  #balao .balao-acoes button { font: inherit; font-size: 11.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; cursor: pointer; }
+  #balao .balao-acoes button:hover { background: rgba(255,255,255,.14); }
+  #balao .balao-acoes button.primario { background: var(--acento); border-color: var(--acento); }
+  /* aberta: a caixa toma a janela inteira */
+  #caixa { position: absolute; inset: 4px; background: #fff; border: 1px solid #CBD3DB; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.22); display: flex; flex-direction: column; overflow: hidden; }
+  .cab { display: flex; align-items: center; gap: 6px; padding: 8px 10px 6px 12px; background: var(--escuro); color: #D5DDE4; cursor: grab; font-size: 12px; user-select: none; }
+  .cab .marca { font-weight: 600; color: #9DB8D4; letter-spacing: .5px; }
+  .cab .marca span { color: #fff; }
+  .cab .resumo { color: #9AA7B3; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cab button { border: none; background: rgba(255,255,255,.08); color: #D5DDE4; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 12px; }
+  .cab button:hover { background: rgba(255,255,255,.18); color: #fff; }
+  .corpo { padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 8px; flex: 1; min-height: 0; }
+  .entrada { display: flex; gap: 6px; }
+  .entrada input { flex: 1; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid #CBD3DB; border-radius: 10px; outline: none; min-width: 0; }
+  .entrada input:focus { border-color: var(--acento); box-shadow: 0 0 0 2px rgba(47,93,138,.18); }
+  .entrada button, .acoes button, .detalhe button, .pergunta button { font: inherit; padding: 6px 12px; border-radius: 10px; border: 1px solid #CBD3DB; background: #fff; cursor: pointer; }
+  .entrada button.primario, .acoes button.primario { background: var(--acento-d); border-color: var(--acento-d); color: #fff; font-weight: 500; }
+  #bt-meu { color: var(--apagado); padding: 6px 9px; }
+  #bt-meu.ativo { background: var(--verde-t); border-color: var(--verde); color: var(--verde); font-weight: 500; }
+  textarea { width: 100%; font: inherit; font-size: 13px; padding: 8px 10px; border: 1px solid #CBD3DB; border-radius: 10px; resize: none; min-height: 110px; outline: none; }
+  textarea:focus { border-color: var(--acento); }
+  /* o entendimento numa linha ("101 Empresa Exemplo · carta de faturamento · vence sex 10/10 · para Ana"); as fichas só na dúvida ou em "ajustar" */
+  .fichas { display: flex; gap: 6px; flex-wrap: wrap; min-height: 0; align-items: center; font-size: 12px; color: var(--apagado); }
+  .fichas:empty { display: none; }
+  .resumo-linha { flex: 1 1 100%; font-size: 12.5px; color: var(--tinta); display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+  .resumo-linha .parte { cursor: pointer; border-bottom: 1px dotted transparent; }
+  .resumo-linha .parte:hover { border-bottom-color: var(--acento); color: var(--acento-dd); }
+  .resumo-linha .sep { color: #B4B2A9; }
+  .resumo-linha .ajustar { margin-left: auto; color: var(--acento-dd); cursor: pointer; font-size: 11.5px; text-decoration: underline dotted; }
+  .ficha { background: var(--claro); color: var(--tinta); border-radius: 999px; padding: 2px 9px; font-size: 12px; cursor: pointer; border: 1px solid transparent; }
+  .ficha:hover { border-color: var(--acento); }
+  .ficha.boa { background: var(--verde-t); color: var(--verde); }
+  .ficha.duvida { background: var(--ambar-t); color: var(--ambar); }
+  .ficha.falta { background: var(--vermelho-t); color: var(--vermelho); }
+  .ficha.dup { background: var(--ambar-t); color: var(--ambar); }
+  .pedidos { overflow-y: auto; font-size: 12.5px; }
+  .pedido { display: flex; gap: 6px; align-items: flex-start; padding: 4px 0; border-top: 1px dashed var(--linha); }
+  .pedido .t { font-weight: 500; }
+  .pedido .sub { color: var(--apagado); font-size: 11.5px; }
+  /* a pergunta depois de mover para "Aguardando cliente": lembrar de cobrar? */
+  .pergunta { background: var(--ambar-t); border: 1px solid #F0D9A8; color: var(--ambar); border-radius: 10px; padding: 6px 10px; font-size: 12px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .pergunta b { color: var(--tinta); font-weight: 500; }
+  .pergunta button { padding: 2px 9px; font-size: 11.5px; border-radius: 999px; }
+  .pergunta .x { margin-left: auto; cursor: pointer; color: var(--apagado); }
+  /* a lista de hoje, por prioridade */
+  #hoje { flex: 1; min-height: 0; overflow-y: auto; border-top: 1px solid var(--linha); margin: 0 -12px; padding: 4px 12px 0; }
+  #hoje .secao { font-size: 10.5px; letter-spacing: .6px; text-transform: uppercase; color: var(--apagado); padding: 6px 0 2px; display: flex; justify-content: space-between; }
+  .tarefa { display: grid; grid-template-columns: 8px 1fr auto; gap: 8px; align-items: center; padding: 6px 4px; border-bottom: 1px solid var(--linha); cursor: pointer; font-size: 12.5px; }
+  .tarefa:hover { background: #F9FAFB; }
+  .tarefa .prio { width: 8px; height: 8px; border-radius: 50%; }
+  .tarefa .tit { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tarefa .sub { color: var(--apagado); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tarefa .prazo { font-size: 11.5px; color: var(--apagado); white-space: nowrap; }
+  .tarefa .prazo.atrasado { color: var(--vermelho); font-weight: 500; }
+  .tarefa .prazo.hoje { color: var(--ambar); font-weight: 500; }
+  .tarefa .tique { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #B4B2A9; cursor: pointer; flex: none; }
+  .tarefa .tique:hover { border-color: var(--verde); background: var(--verde-t); }
+  .tarefa.pessoal { grid-template-columns: 16px 1fr auto; }
+  .detalhe { padding: 6px 8px 10px 20px; border-bottom: 1px solid var(--linha); background: #F9FAFB; font-size: 12.5px; }
+  .detalhe .linha { display: flex; gap: 10px; flex-wrap: wrap; color: var(--apagado); margin-bottom: 4px; }
+  .detalhe .linha b { color: var(--tinta); font-weight: 500; }
+  .detalhe .check { display: flex; gap: 6px; align-items: flex-start; padding: 2px 0; }
+  .detalhe .check .cx { width: 13px; height: 13px; border: 1.5px solid #B4B2A9; border-radius: 3px; flex: none; margin-top: 2px; }
+  .detalhe .check.feito .cx { background: var(--verde); border-color: var(--verde); }
+  .detalhe .check.feito span { text-decoration: line-through; color: var(--apagado); }
+  .detalhe .desc { white-space: pre-wrap; color: var(--apagado); max-height: 90px; overflow: hidden; margin: 4px 0; }
+  /* os botões de estado (Fazendo / Aguardando cliente / Concluída, os status da lista) e o "cobrar" */
+  .detalhe .estados { display: flex; gap: 5px; flex-wrap: wrap; margin: 6px 0 2px; }
+  .detalhe .estados button { padding: 3px 9px; font-size: 11.5px; border-radius: 999px; }
+  .detalhe .estados button.atual { background: var(--claro); border-color: var(--claro); color: var(--apagado); cursor: default; }
+  .detalhe .estados button.feito:hover { background: var(--verde-t); border-color: var(--verde); color: var(--verde); }
+  .detalhe .estados button.aguardando:hover { background: var(--ambar-t); border-color: var(--ambar); color: var(--ambar); }
+  .detalhe .acoes-d { display: flex; gap: 6px; margin-top: 6px; }
+  .detalhe button { padding: 4px 10px; font-size: 12px; }
+  .detalhe button.primario { background: var(--acento-d); border-color: var(--acento-d); color: #fff; }
+  .vazio { color: var(--apagado); padding: 14px 0; text-align: center; font-size: 12.5px; }
+  .dica { color: var(--apagado); font-size: 11.5px; }
+  .acoes { display: flex; gap: 6px; justify-content: flex-end; }
+  .menu { position: absolute; z-index: 20; background: #fff; border: 1px solid #CBD3DB; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 4px; max-height: 240px; overflow-y: auto; }
+  .menu div { padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12.5px; white-space: nowrap; }
+  .menu div:hover { background: var(--claro); }
+  .menu hr { border: none; border-top: 1px solid var(--linha); margin: 3px 0; }
+  .aviso { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); background: var(--escuro); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 12px; z-index: 30; white-space: nowrap; max-width: 95%; overflow: hidden; text-overflow: ellipsis; }
+  #nome { display: flex; gap: 6px; align-items: center; }
+  #nome input { flex: 1; }
+</style>
+</head>
+<body>
+  <div id="bolha" title="Gestor de Demandas — clique: registrar e ver o dia (Ctrl+Shift+D de qualquer programa). Arraste para onde quiser.">
+    <span class="mais">+</span><span class="rot">Demanda<small id="sub">…</small></span><span class="badge" id="badge"></span>
+  </div>
+  <div id="balao" class="oculto"></div>
+  <div id="caixa" class="oculto">
+    <div class="cab" id="cab" title="Arraste para mover">
+      <span class="marca">Gestor de <span>Demandas</span></span>
+      <span class="resumo" id="resumo"></span>
+      <button id="bt-colar" title="Colar uma conversa inteira">📋</button>
+      <button id="bt-tudo" title="Abrir o app completo">⤢ tudo</button>
+      <button id="bt-config" title="Abrir com o Windows, esconder, trocar o nome">⚙</button>
+      <button id="bt-recolher" title="Recolher (Esc)">▾</button>
+    </div>
+    <div class="corpo">
+      <div id="nome" class="oculto"><span>Seu nome:</span><input id="nome-input" type="text" placeholder="como está na Equipe"><button id="nome-ok" class="primario">ok</button></div>
+      <div class="entrada" id="entrada-linha">
+        <input id="linha" type="text" autocomplete="off" placeholder="101 carta de faturamento até sexta pra ana — Enter cria">
+        <button id="bt-meu" title="Coisa sua (vai para o seu espaço, que só você vê). O app adivinha; aqui você força.">meu</button>
+        <button id="bt-criar" class="primario">Criar</button>
+      </div>
+      <div id="entrada-colar" class="oculto">
+        <textarea id="colado" placeholder="Cole aqui a conversa (WhatsApp, e-mail ou chat). Ctrl+Enter cria."></textarea>
+      </div>
+      <div class="fichas" id="fichas"></div>
+      <div class="pedidos oculto" id="pedidos"></div>
+      <div class="acoes oculto" id="acoes-colar"><button id="bt-cancelar-colar">Voltar</button><button id="bt-criar-colar" class="primario">Criar tarefas</button></div>
+      <div id="pergunta" class="pergunta oculto"></div>
+      <div id="hoje"></div>
+      <div class="dica oculto" id="dica"><span id="dica-texto">Enter cria · Ctrl+V com conversa cola · Esc recolhe · Ctrl+Shift+D abre de qualquer programa</span></div>
+    </div>
+  </div>
+  <div id="menu" class="menu oculto"></div>
+  <div id="aviso" class="aviso oculto"></div>
+  <script src="bolha.js"></script>
+</body>
+</html>
