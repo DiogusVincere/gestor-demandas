@@ -1,0 +1,27 @@
+# Blueprint do Render (https://render.com): a demonstração pública do Gestor de Demandas.
+#
+# No painel do Render: New → Blueprint → este repositório. Sobe um web service Python no plano
+# gratuito em https://gestor-demandas.onrender.com (se o nome já estiver em uso, o Render pede
+# outro e a URL muda). O plano gratuito hiberna depois de 15 min sem acesso, e o primeiro acesso
+# depois disso leva uns 30 s para acordar; a cada acordar os dados nascem de novo da semente.
+#
+# `--demo` (= GESTOR_DEMO=1): pasta de dados temporária zerada a cada 24 h, escuta em 0.0.0.0 na
+# porta PORT (o Render define), sem navegador, sem avisos do Windows, sem backup, sem anexo de
+# arquivo, sem usuários/departamentos, e com limites de uso (64 KB por pedido, 500 tarefas).
+services:
+  - type: web
+    name: gestor-demandas
+    runtime: python
+    plan: free
+    region: virginia
+    buildCommand: pip install -r requirements.txt
+    startCommand: python servidor.py --demo --sem-navegador
+    healthCheckPath: /api/versao
+    autoDeploy: true
+    envVars:
+      - key: GESTOR_DEMO
+        value: "1"
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: PYTHONUNBUFFERED
+        value: "1"

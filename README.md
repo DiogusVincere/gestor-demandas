@@ -14,6 +14,30 @@ e-mail e ele separa quem falou, destrincha o que foi pedido e usa o que você co
 
 <!-- adicionar: print da tela principal (Lista) com a caixa de cima e as fichas -->
 
+## Demonstração
+
+**https://gestor-demandas.onrender.com** — publicado pelo `render.yaml` deste repositório (Render, plano
+gratuito). Os dados são fictícios e **zeram todo dia** (e sempre que o serviço acorda): Equipe Ana Souza,
+Bruno Martins e Carla Dias, os cinco clientes de exemplo e uma dúzia de tarefas com prazos relativos a
+hoje — uma atrasada, uma para hoje, uma para amanhã, uma *Aguardando cliente*, uma recorrente, uma
+concluída ontem, comentários, um anexo (link) e um modelo de lista. O plano gratuito hiberna sem uso, por
+isso **o primeiro acesso pode levar uns 30 s**. Qualquer pessoa que abrir vê o que você escrever.
+
+O que a demonstração desliga, em relação ao app completo: avisos pelo Windows e backup em disco (não há
+máquina sua ali), anexo de **arquivo** (só link), usuários e departamentos (um departamento só, sem
+login), e a bolha (que é um programa do Windows). Limites contra abuso: 64 KB por pedido, 500 tarefas ao
+todo, títulos e descrições cortados em 2.000 caracteres (a conversa colada em 20.000), 50 espaços
+pessoais. A faixa amarela no topo da página lembra tudo isso.
+
+Para rodar o mesmo modo na sua máquina:
+
+```
+python servidor.py --demo            # pasta temporária, zera a cada 24 h, abre em http://127.0.0.1:8731
+```
+
+(`--demo` equivale à variável de ambiente `GESTOR_DEMO=1`; `--dados <pasta>` escolhe a pasta, que é
+**apagada e recriada** na subida e a cada zeramento.)
+
 ## Para quem é
 
 Para a equipe que recebe pedidos por todos os canais (WhatsApp, e-mail, telefone, balcão) e precisa
@@ -149,8 +173,8 @@ lembra o lugar). Clique, ou **Ctrl+Shift+D de qualquer programa**, e a caixa abr
 - recolhe sozinha (15 s depois de você ir para outro programa, 90 s parada), nunca com texto digitado.
   "⤢ tudo" abre o app completo numa janela própria; ⚙ tem "abrir com o Windows" e "esconder".
 
-Precisa de `pip install pywebview` e do WebView2 (vem com o Edge). Sem pywebview, abre a página da bolha
-no navegador. Limite do WebView2: a janela não fica transparente nem redonda — por isso é uma barrinha.
+Precisa de `pip install -r requirements-bolha.txt` (pywebview) e do WebView2 (vem com o Edge). Sem
+pywebview, abre a página da bolha no navegador. Limite do WebView2: a janela não fica transparente nem redonda — por isso é uma barrinha.
 
 <!-- adicionar: print da bolha recolhida e aberta -->
 
@@ -226,9 +250,12 @@ Os arquivos de dados e de configuração local estão no `.gitignore`; só os `*
 ## Como rodar
 
 ```
-pip install -r requirements.txt        # rapidfuzz; pywebview só para a bolha
+pip install -r requirements.txt        # rapidfuzz (a bolha pede também requirements-bolha.txt)
 python servidor.py                     # sobe em http://127.0.0.1:8731 e abre o navegador
 ```
+
+Funciona no Windows, Linux e macOS (Python 3.12 ou mais novo); o que é só do Windows — balão de aviso,
+bolha, os `.bat` — fica de fora nos outros sistemas sem quebrar nada.
 
 Ou dê dois cliques em `Abrir Gestor de Demandas.bat` (Windows). Na primeira abertura ele cria `dados/` com
 o espaço **Equipe** (IDs `EQP-1`, `EQP-2`…), as listas **Caixa de entrada**, **Demandas de clientes** e
@@ -239,13 +266,14 @@ Opções do `servidor.py`:
 
 | Opção | Para quê |
 |---|---|
-| `--porta 8731` | a porta (a bolha procura o servidor na 8731) |
-| `--host 127.0.0.1` | só esta máquina (padrão); `0.0.0.0` = servidor central |
+| `--porta 8731` | a porta (a bolha procura o servidor na 8731); a variável de ambiente `PORT` vale quando existe |
+| `--host 127.0.0.1` | só esta máquina (padrão); `0.0.0.0` = servidor central (e o padrão do `--demo`) |
 | `--dados <pasta>` | pasta de dados quando não há `departamentos.json` (padrão `dados/`) |
+| `--demo` | demonstração: dados fictícios numa pasta temporária, zerados a cada 24 h, sem avisos nem anexos de arquivo, com limites de uso (= `GESTOR_DEMO=1`) |
 | `--clientes <arquivo>` | outro `clientes.json` (padrão `<dados>/clientes.json`) |
 | `--departamentos <json>` | outro `departamentos.json`; `-` ignora o do app |
 | `--usuarios <json>` | outro `usuarios.json`; `-` desliga o login mesmo que exista |
-| `--local <pasta>` | onde fica a configuração desta máquina (`avisos.json`); padrão `%LOCALAPPDATA%\GestorDemandas` |
+| `--local <pasta>` | onde fica a configuração desta máquina (`avisos.json`); padrão `%LOCALAPPDATA%\GestorDemandas` (`~/.config/GestorDemandas` fora do Windows) |
 | `--sem-navegador` | não abre o navegador |
 | `--sem-avisos` | não dispara balões do Windows (testes) |
 
@@ -258,7 +286,8 @@ código, pede para ela sair e sobe no lugar (a página recarrega sozinha). Erros
 Tudo em JSON sob `/api`. O nome de quem está usando vai no cabeçalho `X-Pessoa` (codificado com
 `encodeURIComponent`); com login ligado vale o cookie da sessão.
 
-- `GET /api/tudo` — espaços, listas, tarefas, modelos, triagem, equipe, departamentos; `GET /api/versao`.
+- `GET /api/tudo` — espaços, listas, tarefas, modelos, triagem, equipe, departamentos; `GET /api/versao`
+  (versão dos dados, versão do código e `demo: true` quando é a demonstração).
 - `POST /api/entender {texto}` — a prévia da linha; `POST /api/colar {texto, lados?, juntar?}` — a prévia
   da conversa.
 - `POST /api/tarefas {lista, texto, ajustes}` (`modo: "colar"` com `ajustes.pedidos` para a conversa);
@@ -272,9 +301,11 @@ Tudo em JSON sob `/api`. O nome de quem está usando vai no cabeçalho `X-Pessoa
 ## Estrutura de pastas
 
 ```
-servidor.py                      o servidor HTTP e as rotas da API
+servidor.py                      o servidor HTTP e as rotas da API (e o modo --demo)
 bolha.pyw                        a bolha flutuante (pywebview + WebView2)
 toast.ps1                        o balão do Windows
+render.yaml                      o Blueprint da demonstração pública no Render
+requirements.txt                 rapidfuzz; requirements-bolha.txt acrescenta o pywebview
 catalogo.json                    tipos de demanda (editável)
 *.exemplo.json                   modelos de departamentos, usuários, config, feriados, obrigações
 Abrir Gestor de Demandas.bat     abre o servidor local e a página
@@ -294,6 +325,7 @@ nucleo/
   usuarios.py      login, senhas e papéis (modelo A)
   avisos.py        o relógio dos balões e o backup diário
   config.py        domínio de e-mail da equipe
+  demo.py          a semente e os limites do modo demonstração
 web/
   index.html, app.js, estilo.css   a página
   bolha.html, bolha.js             a bolha

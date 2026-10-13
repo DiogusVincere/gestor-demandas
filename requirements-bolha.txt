@@ -1,0 +1,4 @@
+# opcional: a bolha flutuante (bolha.pyw), só no Windows com o WebView2 (vem com o Edge)
+#   pip install -r requirements-bolha.txt
+-r requirements.txt
+pywebview>=5.0

@@ -1,5 +1,6 @@
 # obrigatório: parecença de nomes (cliente pelo nome, com erro de digitação)
 rapidfuzz>=3.0
 
-# opcional, só para a bolha flutuante (bolha.pyw); precisa do WebView2, que vem com o Edge
-# pywebview>=5.0
+# A bolha flutuante (bolha.pyw) precisa do pywebview, que é opcional e só faz sentido no Windows
+# (WebView2, que vem com o Edge): pip install -r requirements-bolha.txt
+# O servidor publicado no Render instala só este arquivo.
