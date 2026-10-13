@@ -1,0 +1,4 @@
+{
+  "_leia": "Copie para config.json. dominio_equipe: o domínio dos e-mails de quem trabalha aqui — numa conversa colada, e-mail desse domínio é da equipe, não do cliente. A variável de ambiente DOMINIO_EQUIPE vale mais que este arquivo.",
+  "dominio_equipe": "empresa.exemplo"
+}

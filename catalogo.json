@@ -1,0 +1,423 @@
+{
+  "_leia": [
+    "O catálogo do que o cliente pede à equipe (contábil, fiscal, jurídica, consultoria). A equipe edita aqui.",
+    "palavras: o que se escreve na linha para cair neste tipo (sem acento, minúsculas).",
+    "prazo_uteis: dias úteis que o escritório costuma dar quando a pessoa não diz o prazo.",
+    "importancia: baixa | media | alta, quando nada no texto diz o contrário.",
+    "checklist: os passos prontos. Linhas com '(cliente)' são coisas que dependem do cliente.",
+    "É um ponto de partida — ajuste prazos e passos pelo que vocês fazem de verdade."
+  ],
+  "tipos": {
+    "carta_faturamento": {
+      "nome": "Carta de faturamento",
+      "palavras": [
+        "carta de faturamento",
+        "carta faturamento",
+        "faturamento 12 meses",
+        "faturamento dos ultimos"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "media",
+      "checklist": [
+        "Puxar o faturamento dos últimos 12 meses no sistema",
+        "Montar a carta no modelo do escritório",
+        "Conferir CNPJ, período e totais",
+        "Assinar e enviar ao cliente"
+      ]
+    },
+    "declaracao_faturamento": {
+      "nome": "Declaração de faturamento",
+      "palavras": [
+        "declaracao de faturamento",
+        "declaracao faturamento",
+        "relatorio de faturamento",
+        "faturamento pro banco",
+        "faturamento para o banco"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "media",
+      "checklist": [
+        "Confirmar o período e o formato que o banco/órgão quer (cliente)",
+        "Puxar os valores no sistema",
+        "Montar no modelo",
+        "Assinar e enviar"
+      ]
+    },
+    "cnd": {
+      "nome": "Certidão negativa (CND)",
+      "palavras": [
+        "cnd",
+        "certidao negativa",
+        "certidao federal",
+        "certidao estadual",
+        "certidao municipal",
+        "certidao fgts",
+        "crf",
+        "certidao trabalhista",
+        "cndt",
+        "certidoes"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "media",
+      "checklist": [
+        "Emitir no portal certo (Receita / Estado / Prefeitura / FGTS / TST)",
+        "Se positiva, levantar o que pende",
+        "Enviar ao cliente"
+      ]
+    },
+    "segunda_via_guia": {
+      "nome": "Guia / 2ª via de guia",
+      "palavras": [
+        "segunda via",
+        "2a via",
+        "2ª via",
+        "guia",
+        "boleto do das",
+        "reemitir das",
+        "das atrasado",
+        "darf",
+        "gps",
+        "2a via",
+        "segunda via da guia",
+        "via da guia"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "media",
+      "checklist": [
+        "Identificar competência e tributo",
+        "Emitir a guia atualizada",
+        "Enviar ao cliente"
+      ]
+    },
+    "parcelamento": {
+      "nome": "Parcelamento",
+      "palavras": [
+        "parcelamento",
+        "parcelar",
+        "parcela do",
+        "refis",
+        "renegociar"
+      ],
+      "prazo_uteis": 3,
+      "importancia": "media",
+      "checklist": [
+        "Levantar os débitos",
+        "Simular o parcelamento",
+        "Confirmar com o cliente (cliente)",
+        "Fazer a adesão",
+        "Enviar a 1ª parcela"
+      ]
+    },
+    "retificacao": {
+      "nome": "Retificação",
+      "palavras": [
+        "retificar",
+        "retificacao",
+        "retificadora",
+        "corrigir a declaracao",
+        "corrigir o das",
+        "corrigir a dctf",
+        "retificar o fechamento",
+        "retificar o das",
+        "retificar a guia",
+        "refazer"
+      ],
+      "prazo_uteis": 5,
+      "importancia": "media",
+      "checklist": [
+        "Entender o que precisa mudar",
+        "Refazer a apuração",
+        "Transmitir a retificadora",
+        "Gerar guia/comprovante",
+        "Avisar o cliente"
+      ]
+    },
+    "nota_fiscal": {
+      "nome": "Nota fiscal (emitir / cancelar / carta de correção)",
+      "palavras": [
+        "emitir nota",
+        "emitir nf",
+        "nota fiscal",
+        "nfs-e",
+        "nfse",
+        "cancelar nota",
+        "carta de correcao",
+        "cancelamento de nota",
+        "nf-e",
+        "nfe",
+        "emitir notas",
+        "emitir as notas",
+        "emissao de nota",
+        "fazer a nota",
+        "faturar",
+        "cancelada",
+        "cancelar",
+        "cancelamento",
+        "emitir a nota",
+        "nota de servico",
+        "nota de serviço",
+        "emissao da nota",
+        "tirar a nota"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "alta",
+      "checklist": [
+        "Conferir os dados da operação (cliente)",
+        "Emitir / cancelar / corrigir no portal",
+        "Enviar o PDF e o XML"
+      ]
+    },
+    "livro_fiscal": {
+      "nome": "Livro fiscal",
+      "palavras": [
+        "livro de servicos",
+        "livro prestados",
+        "livro tomados",
+        "livro de entradas",
+        "livro de saidas",
+        "livro fiscal",
+        "livro"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "media",
+      "checklist": [
+        "Gerar o livro no sistema",
+        "Conferir empresa e período",
+        "Salvar na pasta de fechamento do cliente",
+        "Arquivar o comprovante"
+      ]
+    },
+    "simples_nacional": {
+      "nome": "Simples Nacional (apuração / DAS)",
+      "palavras": [
+        "apurar o simples",
+        "apuracao do simples",
+        "pgdas",
+        "das do mes",
+        "calcular o das",
+        "simples nacional",
+        "fechamento do simples",
+        "simples"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "alta",
+      "checklist": [
+        "Receber o faturamento (cliente)",
+        "Apurar no PGDAS-D",
+        "Gerar o DAS",
+        "Enviar ao cliente"
+      ]
+    },
+    "dctfweb": {
+      "nome": "DCTFWeb",
+      "palavras": [
+        "dctfweb",
+        "dctf web",
+        "dctf"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "alta",
+      "checklist": [
+        "Conferir eSocial / Reinf fechados",
+        "Transmitir a DCTFWeb",
+        "Gerar DARF",
+        "Salvar o recibo na pasta"
+      ]
+    },
+    "balancete": {
+      "nome": "Balancete / relatório contábil",
+      "palavras": [
+        "balancete",
+        "balanco",
+        "dre",
+        "relatorio contabil",
+        "razao"
+      ],
+      "prazo_uteis": 3,
+      "importancia": "media",
+      "checklist": [
+        "Confirmar período e finalidade (cliente)",
+        "Pedir ao Contábil / gerar",
+        "Conferir e enviar"
+      ]
+    },
+    "pro_labore": {
+      "nome": "Pró-labore / folha",
+      "palavras": [
+        "pro-labore",
+        "pro labore",
+        "prolabore",
+        "holerite",
+        "folha de pagamento",
+        "folha"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "media",
+      "checklist": [
+        "Encaminhar ao Pessoal",
+        "Acompanhar o retorno",
+        "Enviar ao cliente"
+      ]
+    },
+    "cadastro": {
+      "nome": "Cadastro / alteração cadastral",
+      "palavras": [
+        "alteracao cadastral",
+        "mudar endereco",
+        "mudar atividade",
+        "cnae",
+        "inscricao estadual",
+        "inscricao municipal",
+        "cadesp",
+        "abrir filial",
+        "alterar contrato"
+      ],
+      "prazo_uteis": 5,
+      "importancia": "media",
+      "checklist": [
+        "Levantar documentos (cliente)",
+        "Protocolar",
+        "Acompanhar o deferimento",
+        "Atualizar o cadastro no sistema e avisar"
+      ]
+    },
+    "fiscalizacao": {
+      "nome": "Fiscalização / intimação / notificação",
+      "palavras": [
+        "fiscalizacao",
+        "intimacao",
+        "notificacao",
+        "auto de infracao",
+        "malha",
+        "termo de inicio",
+        "receita pediu",
+        "prefeitura pediu"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "alta",
+      "checklist": [
+        "Ler o documento e anotar o prazo legal",
+        "Levantar o que foi pedido",
+        "Montar a resposta",
+        "Protocolar dentro do prazo",
+        "Guardar o comprovante"
+      ]
+    },
+    "arquivos_xml": {
+      "nome": "XML / arquivos fiscais",
+      "palavras": [
+        "xml",
+        "xmls",
+        "arquivo sped",
+        "sped fiscal",
+        "efd",
+        "arquivos das notas",
+        "mandar os xml"
+      ],
+      "prazo_uteis": 2,
+      "importancia": "baixa",
+      "checklist": [
+        "Separar o período pedido",
+        "Gerar / baixar",
+        "Enviar ao cliente"
+      ]
+    },
+    "consulta": {
+      "nome": "Dúvida / consulta",
+      "palavras": [
+        "duvida",
+        "pergunta",
+        "quer saber",
+        "perguntou",
+        "como funciona",
+        "pode ou nao",
+        "consulta",
+        "orientacao"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "baixa",
+      "checklist": [
+        "Entender a pergunta",
+        "Responder ao cliente"
+      ]
+    },
+    "reuniao": {
+      "nome": "Reunião / ligação",
+      "palavras": [
+        "reuniao",
+        "reuniao com",
+        "ligar para",
+        "ligar pro",
+        "ligar pra",
+        "retornar ligacao",
+        "retornar a ligacao",
+        "agendar"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "media",
+      "checklist": [
+        "Combinar o horário (cliente)",
+        "Fazer",
+        "Anotar o que ficou decidido"
+      ]
+    },
+    "envio_documentos": {
+      "nome": "Enviar documento / comprovante",
+      "palavras": [
+        "enviar o comprovante",
+        "mandar o comprovante",
+        "enviar o recibo",
+        "mandar o recibo",
+        "reenviar",
+        "enviar a declaracao",
+        "mandar a declaracao",
+        "comprovante"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "baixa",
+      "checklist": [
+        "Localizar na pasta do cliente",
+        "Enviar"
+      ]
+    },
+    "certificado_digital": {
+      "nome": "Certificado digital",
+      "palavras": [
+        "certificado digital",
+        "certificado",
+        "e-cnpj",
+        "ecnpj",
+        "a1",
+        "renovar certificado",
+        "vencimento do certificado"
+      ],
+      "prazo_uteis": 3,
+      "importancia": "media",
+      "checklist": [
+        "Conferir a validade no sistema",
+        "Avisar o cliente se vence em 30 dias",
+        "Agendar/renovar",
+        "Instalar e testar no sistema"
+      ]
+    },
+    "aliquota_simples": {
+      "nome": "Alíquota do Simples (enviar ao cliente)",
+      "palavras": [
+        "aliquota",
+        "alíquota",
+        "enviar a aliquota",
+        "mandar a aliquota",
+        "aliquota efetiva",
+        "percentual do simples",
+        "enviar a aliquota",
+        "aliquota do simples"
+      ],
+      "prazo_uteis": 1,
+      "importancia": "media",
+      "checklist": [
+        "Pegar a alíquota efetiva no PGDAS-D",
+        "Enviar no e-mail do cliente"
+      ]
+    }
+  }
+}

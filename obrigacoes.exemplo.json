@@ -1,0 +1,13 @@
+[
+  {"nome": "DCTFWeb",            "dia": 15, "ajuste": "anterior",  "palavras": ["dctfweb", "dctf"]},
+  {"nome": "DAS (Simples)",      "dia": 20, "ajuste": "posterior", "palavras": ["das", "simples"]},
+  {"nome": "GPS / INSS",         "dia": 20, "ajuste": "anterior",  "palavras": ["gps", "inss"]},
+  {"nome": "FGTS",               "dia": 20, "ajuste": "anterior",  "palavras": ["fgts"]},
+  {"nome": "ISS",                "dia": 10, "ajuste": "posterior", "palavras": ["iss"]},
+  {"nome": "ICMS",               "dia": 20, "ajuste": "posterior", "palavras": ["icms", "gia"]},
+  {"nome": "PIS/COFINS",         "dia": 25, "ajuste": "anterior",  "palavras": ["pis", "cofins"]},
+  {"nome": "EFD Contribuições",  "dia": 15, "ajuste": "posterior", "palavras": ["efd contribuicoes", "sped contribuicoes"]},
+  {"nome": "EFD-Reinf",          "dia": 15, "ajuste": "anterior",  "palavras": ["reinf"]},
+  {"nome": "Livros fiscais",     "dia": 20, "ajuste": "posterior", "palavras": ["livro"]},
+  {"nome": "Relatório mensal ao cliente", "dia": 5, "ajuste": "posterior", "palavras": ["relatorio mensal"]}
+]
