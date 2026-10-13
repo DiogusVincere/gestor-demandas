@@ -19,6 +19,7 @@ import datetime as dt
 import json
 import os
 import subprocess
+import sys
 import threading
 from pathlib import Path
 
@@ -210,8 +211,11 @@ class Avisos:
         return aviso
 
     def balao(self, titulo: str, texto: str) -> bool:
-        """O aviso no canto da tela do Windows. Falha em silêncio: a página ainda mostra."""
-        if not TOAST.is_file():
+        """O aviso no canto da tela do Windows. Falha em silêncio: a página ainda mostra.
+
+        Só existe no Windows (PowerShell + toast.ps1); em outro sistema devolve False sem tentar —
+        `creationflags` nem é aceito fora do Windows."""
+        if sys.platform != "win32" or not TOAST.is_file():
             return False
         try:
             subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden",

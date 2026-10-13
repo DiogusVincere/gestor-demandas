@@ -12,7 +12,9 @@
 - `escritorio`   vários departamentos, cada um com a sua pasta, e o espaço pessoal de cada um;
 - `usuarios`     login, senhas e papéis do servidor central;
 - `avisos`       o relógio que lembra pelo balão do Windows mesmo com a página fechada;
-- `config`       o domínio de e-mail da equipe.
+- `config`       o domínio de e-mail da equipe;
+- `demo`         a semente e os limites do modo demonstração (`servidor.py --demo`).
 
-Nada aqui escreve fora da pasta de dados e de `%LOCALAPPDATA%/GestorDemandas`.
+Nada aqui escreve fora da pasta de dados e da pasta de configuração da máquina
+(`%LOCALAPPDATA%/GestorDemandas` no Windows, `~/.config/GestorDemandas` no resto).
 """

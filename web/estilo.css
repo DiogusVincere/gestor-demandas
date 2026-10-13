@@ -385,3 +385,8 @@ button.mini.destaque { border: 1px solid var(--acento); color: var(--acento-dd);
 /* ---------------- resumo do dia */
 .lembretes.resumo { background: var(--azul-t); border-color: #B5D4F4; color: var(--azul); }
 .lembretes.resumo .item { color: var(--tinta); }
+
+/* ---------------- faixa da demonstração pública (só quando o servidor roda com --demo) */
+.faixa-demo { display: flex; align-items: center; gap: 10px; padding: 5px 20px; font-size: 12.5px; background: var(--ambar-t); color: var(--ambar); border-bottom: 1px solid #F0D9A8; }
+.faixa-demo .quando { color: var(--apagado); }
+.faixa-demo .mini { margin-left: auto; color: var(--ambar); }

@@ -59,6 +59,9 @@ class Escritorio:
         # o espaço Pessoal de cada pessoa (dados\pessoal\<nome>\ dentro do primeiro departamento dela)
         self._areas_pessoais: dict = {}
         self._tranca_pessoal = threading.Lock()
+        # teto de espaços pessoais abertos (None = sem teto). A demonstração pública usa, porque cada
+        # nome digitado na página abriria uma pasta nova.
+        self.max_pessoais: int | None = None
         self.carregar()
 
     def definir_usuario(self, usuario: dict | None) -> None:
@@ -88,6 +91,8 @@ class Escritorio:
         with self._tranca_pessoal:
             if chave in self._areas_pessoais:
                 return self._areas_pessoais[chave]
+            if self.max_pessoais is not None and len(self._areas_pessoais) >= self.max_pessoais:
+                return None
             abertos = [d for d in self.departamentos if d.acessivel]
             if self.login_ligado:
                 u = self.usuario()

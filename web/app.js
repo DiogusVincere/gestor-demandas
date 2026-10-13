@@ -169,6 +169,22 @@ async function carregar(primeira = false) {
   $("#equipe-lateral").textContent = eq.length ? eq.join(", ") : "ninguém cadastrado — clique em ⋯";
 }
 let codigoDoServidor = "";
+/* a faixa "Demonstração pública…" — só quando /api/versao diz demo: true (o servidor público do Render) */
+function faixaDemo(v) {
+  const f = $("#faixa-demo");
+  if (!f || !v || !v.demo) return;
+  const quando = v.demo_zera_em ? `Zera ${fmtDataCurta(v.demo_zera_em)} às ${v.demo_zera_em.slice(11, 16)}.` : "";
+  if (f.dataset.pronta) {
+    // já desenhada: só atualiza a hora do próximo zeramento (muda depois que os dados zeram); se a pessoa escondeu, fica escondida
+    const q = f.querySelector(".quando"); if (q && q.textContent !== quando) q.textContent = quando;
+    return;
+  }
+  f.dataset.pronta = "1"; f.innerHTML = "";
+  f.append(el("span", { text: v.demo_faixa || "Demonstração pública: os dados são fictícios e zeram todo dia. Qualquer um que abrir vê o que você escrever." }));
+  f.append(el("span", { class: "quando", text: quando }));
+  f.append(el("button", { class: "mini", text: "×", title: "esconder por agora", onclick: () => f.classList.add("oculto") }));
+  f.classList.remove("oculto");
+}
 setInterval(async () => {
   if (!E.dados) return;
   try {
@@ -176,6 +192,7 @@ setInterval(async () => {
     // o servidor foi trocado por uma versão nova: a página recarrega para pegar o código novo
     if (codigoDoServidor && v.codigo && v.codigo !== codigoDoServidor) { location.reload(); return; }
     codigoDoServidor = v.codigo || codigoDoServidor;
+    faixaDemo(v);
     if (v.versao !== E.dados.versao) await carregar();
   } catch (e) { }
 }, 5000);
@@ -2018,6 +2035,7 @@ E.pessoa = localStorage.getItem("demandas.pessoa") || "";
 (async () => {
   let eu = null;
   try { const r = await fetch("/api/eu"); eu = await r.json(); } catch (e) { }
+  try { const r = await fetch("/api/versao"); const v = await r.json(); codigoDoServidor = v.codigo || ""; faixaDemo(v); } catch (e) { }
   E.loginLigado = !!(eu && eu.login_ligado);
   if (E.loginLigado) {
     if (eu.usuario) { E.usuario = eu.usuario; E.pessoa = eu.usuario.nome; localStorage.setItem("demandas.pessoa", E.pessoa); iniciar(); }
