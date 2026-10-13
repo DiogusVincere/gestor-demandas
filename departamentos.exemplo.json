@@ -1,0 +1,17 @@
+{
+  "_leia": [
+    "Copie para departamentos.json (mesma pasta) e ajuste. Sem esse arquivo o app roda com um",
+    "departamento só, chamado Equipe, na pasta dados/.",
+    "Cada departamento tem a sua pasta de dados: relativa à pasta do app (dados/fiscal) ou um",
+    "caminho completo, inclusive de rede. Quem vê o quê é a PERMISSÃO DA PASTA, que a TI administra:",
+    "membro do Fiscal lê só a pasta do Fiscal; gestor lê todas; quem não tem acesso vê o departamento",
+    "como 'sem acesso' e nada mais.",
+    "Admin = quem consegue escrever este arquivo (ou o papel admin, quando o login está ligado).",
+    "\"armazem\": \"sqlite\" liga o banco SQLite naquele departamento (só para o servidor central)."
+  ],
+  "departamentos": [
+    {"nome": "Fiscal",   "pasta": "dados/fiscal",   "cor": "#2F5D8A"},
+    {"nome": "Contábil", "pasta": "dados/contabil", "cor": "#7F77DD"},
+    {"nome": "Pessoal",  "pasta": "dados/pessoal",  "cor": "#D85A30"}
+  ]
+}

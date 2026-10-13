@@ -1,0 +1,11 @@
+{
+  "_leia": [
+    "Copie para usuarios.json ao lado do departamentos.json e o login liga (modelo A, servidor central).",
+    "Senha escrita em claro vira hash PBKDF2 na primeira leitura. Papéis: membro, gestor, admin.",
+    "Os nomes dos departamentos têm que bater com o departamentos.json (sem ele, o único é 'Equipe')."
+  ],
+  "usuarios": [
+    {"login": "ana",   "nome": "Ana Souza",     "senha": "troque-esta-senha", "papel": "admin",  "departamentos": ["Equipe"], "gere": []},
+    {"login": "bruno", "nome": "Bruno Martins", "senha": "troque-esta-senha", "papel": "membro", "departamentos": ["Equipe"], "gere": []}
+  ]
+}
